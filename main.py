@@ -1,17 +1,32 @@
-meme_dict = {
-            "КРИНЖ": "Что-то очень странное или стыдное",
-            "ЛОЛ": "Что-то очень смешное",
-            "РОФЛ": "шутка",
-            "ЩИЩ": "одобрение или восторг",
-            "КРИПОВЫЙ": "страшный, пугающий",
-            "АГРИТЬСЯ": "злиться",
-            
-            "ВАЙБ": "атмосфера, настроение"
-            }
-print("Программа по поиску слов, введите слово которое вам неизвестно и если оно есть в словаре, вам выведет что оно означает")
-for i in range(5):
-    word = input("Введите непонятное вам слово").upper()
-    if word in meme_dict.keys():
-        print(meme_dict[word])
-    else:
-        print("Слово не найдено :(")
+import discord
+from discord.ext import commands
+import random
+from botLogic import *
+
+intents = discord.Intents.default()
+intents.message_content = True
+bot = commands.Bot(command_prefix='$', intents=intents)
+
+@bot.event
+async def on_ready():
+    print(f'We have logged in as {bot.user}')
+
+@bot.command()
+async def hello(ctx):
+    await ctx.send("Hello! " + ctx.message.author.name)
+
+@bot.command()
+async def toss(ctx):
+    await ctx.send(toss_coin())
+
+@bot.command()
+async def gpass(ctx, *args):
+    await ctx.send(pass_gen(int(args[0])))   
+
+@bot.command()
+async def repeat(ctx, content, times = 5):
+    for i in range(times):
+        await ctx.send(content)
+
+
+bot.run("MTI4NDc3NDEwMzUwMDMyNDg3Ng.G6u8YH.fSb_FF4oqU1sDD2Su5M0EjqZ_wIiI6EubvYdr8")

@@ -7,10 +7,15 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='$', intents=intents)
 
+
 @bot.event
 async def on_ready():
     print(f'We have logged in as {bot.user}')
 
+@bot.command()
+async def bothelp(ctx):
+    await ctx.send("$hello - print hello\n$toss - toss a coin\n$gpass [number] - generate password\n$repeat [message] [times] - repeat [message] [times] times\n$joined [name] - show when [name] joined")
+    
 @bot.command()
 async def hello(ctx):
     await ctx.send("Hello! " + ctx.message.author.name)

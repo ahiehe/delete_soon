@@ -28,5 +28,8 @@ async def repeat(ctx, content, times = 5):
     for i in range(times):
         await ctx.send(content)
 
+@bot.command()
+async def joined(ctx, member: discord.Member):
+    await ctx.send(f'{member.name} joined {discord.utils.format_dt(member.joined_at)}')
 
 bot.run(TOKEN)

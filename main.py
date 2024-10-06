@@ -1,64 +1,54 @@
 import discord
 from discord.ext import commands
 import random
-from botLogic import *
+
 
 intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='$', intents=intents)
 
-
 @bot.event
 async def on_ready():
     print(f'We have logged in as {bot.user}')
 
+eco_tips = [
+    "Используйте многоразовые сумки, бутылки и контейнеры. Это поможет уменьшить количество пластиковых отходов.",
+    "Ознакомьтесь с местными правилами переработки и сортируйте свои отходы. Убедитесь, что вы правильно утилизируете пластик, бумагу, стекло и металл.",
+    "Выключайте свет и электроприборы, когда они не нужны. Рассмотрите возможность использования энергосберегающих ламп и техники.",
+    "По возможности используйте общественный транспорт, велосипед или ходите пешком. Это снизит выбросы углерода и улучшит качество воздуха.",
+    "Поддерживайте местные фермерские рынки и покупайте сезонные продукты. Это снижает углеродный след, связанный с транспортировкой пищи.",
+    "Используйте душ вместо ванны, устанавливайте водосберегающие устройства и проверяйте сантехнику на утечки.",
+    "Создавайте и поддерживайте сады, даже на балконах. Растения помогают очищать воздух и создают более приятную атмосферу.",
+    "Перед покупкой задайте себе вопрос, действительно ли вам это нужно. Предпочитайте вещи, сделанные из устойчивых материалов.",
+    "Участвуйте в экологических инициативах и акциях в вашем сообществе. Делитесь знаниями с друзьями и семьей.",
+    "Участвуйте в программах по восстановлению лесов, очистке водоемов или других экологических инициативах."
+]
+decomposition_times = """
+1. **Органические отходы (еда)**: Разлагаются от 3 до 6 месяцев.
+2. **Бумага**: Разлагается от 2 до 6 месяцев.
+3. **Картон**: Разлагается от 2 до 3 месяцев.
+4. **Ткани (хлопок)**: Разлагаются от 1 до 5 месяцев.
+5. **Сигаретные окурки**: Разлагаются от 1 до 5 лет.
+6. **Пластиковые пакеты**: Разлагаются от 10 до 1000 лет.
+7. **Пластиковые бутылки**: Разлагаются от 450 до 1000 лет.
+8. **Металлические банки**: Разлагаются от 50 до 100 лет.
+9. **Кожаные изделия**: Разлагаются от 25 до 40 лет.
+10. **Стекло**: Не разлагается, может оставаться в природе тысячи лет.
+11. **Пенопласт**: Разлагается от 500 до 1000 лет.
+12. **Резиновые изделия**: Разлагаются от 50 до 80 лет.
+
+Помните, что разложение зависит от условий окружающей среды, таких как температура, влажность и доступ кислорода. Переработка отходов может значительно снизить нагрузку на окружающую среду!
+"""
 @bot.command()
-async def bothelp(ctx):
-    await ctx.send("$hello - print hello\n$toss - toss a coin\n$gpass [number] - generate password\n$repeat [message] [times] - repeat [message] [times] times\n$joined [name] - show when [name] joined")
-    
-@bot.command()
-async def hello(ctx):
-    await ctx.send("Hello! " + ctx.message.author.name)
+async def helpbot(ctx):
+    await ctx.send("$tip - дает случайный совет\n$decomposition - выписывает список предметов и время их разложения")
 
 @bot.command()
-async def toss(ctx):
-    await ctx.send(toss_coin())
+async def tip(ctx):
+    await ctx.send(random.choice(eco_tips))
 
 @bot.command()
-async def gpass(ctx, *args):
-    await ctx.send(pass_gen(int(args[0])))   
-
-@bot.command()
-async def repeat(ctx, content, times = 5):
-    for i in range(times):
-        await ctx.send(content)
-        
-@bot.command()
-async def randmem(ctx):
-    picture = "images/" + random.choice(os.listdir("images"))
-    with open(picture, 'rb') as mem:
-        picture = discord.File(mem)
-    await ctx.send(file=picture)
-
-def get_rand_image_url(url, imageKeyjson):    
-    res = requests.get(url)
-    data = res.json()
-    return data[imageKeyjson]
-
-
-@bot.command('duck')
-async def duck(ctx):
-
-    image_url = get_rand_image_url('https://random-d.uk/api/random', 'url')
-    await ctx.send(image_url)
-
-@bot.command('dog')
-async def dog(ctx):
-    image_url = get_rand_image_url('https://some-random-api.com/animal/dog', 'image')
-    await ctx.send(image_url)
-    
-@bot.command()
-async def joined(ctx, member: discord.Member):
-    await ctx.send(f'{member.name} joined {discord.utils.format_dt(member.joined_at)}')
+async def decomposition(ctx):
+    await ctx.send(decomposition_times)
 
 bot.run(TOKEN)
